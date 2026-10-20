@@ -1,0 +1,18 @@
+# Python / uv project
+.env
+.env.*
+!.env.example
+.venv/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# VS Code settings
+.vscode/
+
+# Other
+.DS_Store
