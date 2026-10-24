@@ -10,6 +10,7 @@ from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langgraph.checkpoint.memory import InMemorySaver
 from langfuse import get_client
 from langfuse.langchain import CallbackHandler
+from langchain.agents.structured_output import ToolStrategy
 
 # Load API keys
 load_dotenv()
@@ -43,7 +44,7 @@ model = ChatNVIDIA(
     model="nvidia/nemotron-3.5-super-vl-120b-a12b",
     nvidia_api_key=os.getenv("NVIDIA_API_KEY"),
     temperature=0.1,
-    max_completion_tokens=2048,
+    max_completion_tokens=100,
 )
 
 # Set up short-term memory
@@ -61,15 +62,16 @@ agent = create_agent(
     system_prompt=system_prompt,
     tools=[tavily_web_search],
     checkpointer=memory,
-    response_format=Answer,
+    response_format=ToolStrategy(Answer),
 )
 
 # Ask the agent a question
 try:
     result = agent.invoke(
-        {"messages": [{"role": "user", "content": "What is the capital of india?"}]},
+        {"messages": [{"role": "user", "content": "what is the  latest version of LLM from google?"}]},
         config=config,
     )
     print("Agent Response:", result["structured_response"])
 finally:
     langfuse.flush()
+# uv run python Memory/short-term-memory.py
